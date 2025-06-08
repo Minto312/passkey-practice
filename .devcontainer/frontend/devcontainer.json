@@ -1,9 +1,8 @@
 {
     "name": "passkey-frontend",
-    "dockerFile": "Dockerfile",
-    "runArgs": [
-	    "--name=passkey-frontend"
-    ],
+    "dockerComposeFile": ["../docker-compose.yml"],
+    "service": "frontend",
+    "workspaceFolder": "/workspace",
     "features": {
         "ghcr.io/devcontainers/features/git:1": {},
         "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {

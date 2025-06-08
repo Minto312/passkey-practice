@@ -15,5 +15,4 @@ RUN groupadd --gid ${usergid} ${username} && \
 
 USER ${username}
 
-RUN curl -fsSL https://bun.sh/install | bash && \
-    source /home/vscode/.bashrc 
+RUN curl -fsSL https://bun.sh/install | bash

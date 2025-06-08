@@ -1,9 +1,8 @@
 {
     "name": "passkey-backend",
-    "dockerFile": "Dockerfile",
-    "runArgs": [
-	    "--name=passkey-backend"
-    ],
+    "dockerComposeFile": ["../docker-compose.yml"],
+    "service": "backend",
+    "workspaceFolder": "/workspace",
     "features": {
         "ghcr.io/devcontainers/features/git:1": {},
         "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
