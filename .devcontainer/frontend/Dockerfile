@@ -14,3 +14,6 @@ RUN groupadd --gid ${usergid} ${username} && \
     chown -R ${username}:${username} /home/${username}
 
 USER ${username}
+
+RUN curl -fsSL https://bun.sh/install | bash && \
+    source /home/vscode/.bashrc 
