@@ -4,6 +4,7 @@ import (
     "encoding/json"
     "net/http"
     usecase "passkey-practice/backend/internal/usecase/user"
+    "github.com/gin-gonic/gin"
 )
 
 type RegisterUserRequest struct {
@@ -45,6 +46,31 @@ func RegisterUserHandler(uc *usecase.RegisterUserUseCase) http.HandlerFunc {
         }
         w.Header().Set("Content-Type", "application/json")
         json.NewEncoder(w).Encode(res)
+    }
+}
+
+func RegisterUserHandlerGin(uc *usecase.RegisterUserUseCase) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        var req RegisterUserRequest
+        if err := c.ShouldBindJSON(&req); err != nil {
+            c.JSON(400, gin.H{"error": "Invalid request body"})
+            return
+        }
+        user, err := uc.Register(usecase.RegisterUserInput{
+            Name:     req.Name,
+            Email:    req.Email,
+            Password: req.Password,
+        })
+        if err != nil {
+            c.JSON(400, gin.H{"error": err.Error()})
+            return
+        }
+        res := RegisterUserResponse{
+            ID:    user.ID.String(),
+            Name:  user.Name,
+            Email: user.Email.String(),
+        }
+        c.JSON(200, res)
     }
 }
 
