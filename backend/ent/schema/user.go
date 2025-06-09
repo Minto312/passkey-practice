@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"time"
+	"github.com/google/uuid"
 )
 
 type User struct {
@@ -13,7 +14,7 @@ type User struct {
 
 func (User) Fields() []ent.Field {
 	return []ent.Field{
-		field.UUID("id", nil).DefaultUUID().Unique(),
+		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.String("name").NotEmpty(),
 		field.String("email").NotEmpty().Unique(),
 		field.String("password_hash").NotEmpty(),
@@ -25,8 +26,8 @@ func (User) Fields() []ent.Field {
 
 func (User) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("passkeys", Passkey.Type),
-		edge.To("auth_histories", AuthHistory.Type),
-		edge.To("sessions", Session.Type),
+		edge.To("passkeys", Passkey{}),
+		edge.To("auth_histories", AuthHistory{}),
+		edge.To("sessions", Session{}),
 	}
 }

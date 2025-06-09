@@ -5,6 +5,7 @@ import (
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"time"
+	"github.com/google/uuid"
 )
 
 type Session struct {
@@ -13,7 +14,7 @@ type Session struct {
 
 func (Session) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").Unique(),
+		field.UUID("id", uuid.UUID{}).Default(uuid.New).Unique(),
 		field.Time("created_at").Default(time.Now),
 		field.Time("expires_at"),
 		field.String("refresh_token"),

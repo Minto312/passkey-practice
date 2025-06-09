@@ -2,9 +2,8 @@ package repository
 
 import (
 	"context"
-	"github.com/google/uuid"
-	entpkg "passkey-practice/backend/ent"
-	"passkey-practice/backend/internal/domain/user"
+	entpkg "github.com/Minto312/passkey-practice/backend/ent"
+	"github.com/Minto312/passkey-practice/backend/internal/domain/user"
 )
 
 type EntUserRepository struct {
