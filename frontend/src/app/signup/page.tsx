@@ -1,5 +1,6 @@
 "use client";
 import { apiRequest } from "@/utils/api";
+import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,6 +19,13 @@ export default function Signup() {
 		setLoading(true);
 		setError("");
 		setSuccess("");
+
+		if (password.length < 8) {
+			setError("パスワードは8文字以上で入力してください。");
+			setLoading(false);
+			return;
+		}
+
 		try {
 			await apiRequest({
 				method: "POST",
@@ -28,8 +36,12 @@ export default function Signup() {
 			setTimeout(() => {
 				router.push("/login");
 			}, 2000);
-		} catch (err) {
-			setError("登録に失敗しました。");
+		} catch (err: unknown) {
+			if (axios.isAxiosError(err) && err.response) {
+				setError(err.response.data.error || "登録に失敗しました。");
+			} else {
+				setError("予期せぬエラーが発生しました。");
+			}
 		} finally {
 			setLoading(false);
 		}
