@@ -37,11 +37,12 @@ func main() {
 	// DI
 	userRepo := repository.NewUserRepository(client)
 	sessionRepo := repository.NewSessionRepository(client)
+	authHistoryRepo := repository.NewAuthHistoryRepository(client)
 
 	registerUserUseCase := user_usecase.NewRegisterUserInteractor(userRepo)
 	registerUserController := user.NewRegisterUserController(registerUserUseCase)
 
-	loginUserUseCase := user_usecase.NewLoginUserInteractor(userRepo, sessionRepo)
+	loginUserUseCase := user_usecase.NewLoginUserInteractor(userRepo, sessionRepo, authHistoryRepo)
 	loginUserController := user.NewLoginUserController(loginUserUseCase)
 
 	// Setup router

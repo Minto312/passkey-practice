@@ -1,33 +1,49 @@
 package auth_history
 
-import "errors"
+import (
+	"errors"
 
-var (
-	ErrInvalidAuthMethod = errors.New("invalid auth method")
+	"github.com/google/uuid"
 )
 
-// AuthHistoryID は履歴IDを表す値オブジェクトです。
-type AuthHistoryID int
+// AuthHistoryID は認証履歴IDを表す値オブジェクトだよ。
+type AuthHistoryID struct {
+	uuid.UUID
+}
 
-// AuthMethod は認証方式を表す値オブジェクトです。
+// NewAuthHistoryID は新しい認証履歴IDを生成するよ。
+func NewAuthHistoryID() AuthHistoryID {
+	return AuthHistoryID{uuid.New()}
+}
+
+// ParseAuthHistoryID は文字列から認証履歴IDをパースするよ。
+func ParseAuthHistoryID(s string) (AuthHistoryID, error) {
+	id, err := uuid.Parse(s)
+	if err != nil {
+		return AuthHistoryID{}, err
+	}
+	return AuthHistoryID{id}, nil
+}
+
+// AuthMethod は認証方法を表す値オブジェクトだよ。
 type AuthMethod string
 
 const (
-	AuthMethodPassword AuthMethod = "password"
-	AuthMethodPasskey  AuthMethod = "passkey"
+	PasswordAuth AuthMethod = "password"
+	PasskeyAuth  AuthMethod = "passkey"
 )
 
 func NewAuthMethod(method string) (AuthMethod, error) {
 	switch AuthMethod(method) {
-	case AuthMethodPassword, AuthMethodPasskey:
+	case PasswordAuth, PasskeyAuth:
 		return AuthMethod(method), nil
 	default:
-		return "", ErrInvalidAuthMethod
+		return "", errors.New("invalid auth method")
 	}
 }
 
-// IPAddress はIPアドレスを表す値オブジェクトです。
+// IPAddress はIPアドレスを表す値オブジェクトだよ。
 type IPAddress string
 
-// UserAgent はユーザーエージェントを表す値オブジェクトです。
+// UserAgent はユーザーエージェントを表す値オブジェクトだよ。
 type UserAgent string
