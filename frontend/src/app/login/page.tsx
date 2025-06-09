@@ -1,5 +1,8 @@
 "use client";
+import { apiRequest } from "@/utils/api";
+import { isAxiosError } from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Login() {
@@ -8,17 +11,35 @@ export default function Login() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	const [success, setSuccess] = useState("");
+	const router = useRouter();
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setLoading(true);
 		setError("");
 		setSuccess("");
-		// TODO: API連携
-		setTimeout(() => {
+
+		try {
+			const response = await apiRequest<{ access_token: string }>({
+				method: "POST",
+				url: "/login",
+				data: { email, password },
+			});
+			localStorage.setItem("token", response.access_token);
+			setSuccess("ログインに成功しました！");
+			// 2秒後にマイページにリダイレクト
+			setTimeout(() => {
+				router.push("/mypage");
+			}, 2000);
+		} catch (err) {
+			if (isAxiosError(err) && err.response) {
+				setError(err.response.data.error || "ログインに失敗しました。");
+			} else {
+				setError("不明なエラーが発生しました。");
+			}
+		} finally {
 			setLoading(false);
-			setSuccess("ログイン成功！");
-		}, 1000);
+		}
 	};
 
 	const handlePasskeyLogin = async () => {
