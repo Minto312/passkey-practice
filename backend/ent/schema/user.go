@@ -2,8 +2,8 @@ package schema
 
 import (
 	"entgo.io/ent"
-	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/edge"
+	"entgo.io/ent/schema/field"
 	"time"
 )
 
@@ -29,4 +29,4 @@ func (User) Edges() []ent.Edge {
 		edge.To("auth_histories", AuthHistory.Type),
 		edge.To("sessions", Session.Type),
 	}
-} 
+}
