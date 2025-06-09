@@ -30,5 +30,6 @@ function createApiClient(baseURL: string = BASE_URL): AxiosInstance {
 export async function apiRequest<T = unknown, D = unknown>(config: AxiosRequestConfig<D>): Promise<T> {
 	const client = createApiClient();
 	const response: AxiosResponse<T> = await client.request<T, AxiosResponse<T>, D>(config);
+	console.dir(response.data);
 	return response.data;
 }

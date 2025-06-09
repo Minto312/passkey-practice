@@ -3,15 +3,18 @@ package main
 import (
 	"context"
 	"fmt"
+	"log/slog"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/Minto312/passkey-practice/backend/ent"
 	repo "github.com/Minto312/passkey-practice/backend/internal/infra/repository"
 	usecase "github.com/Minto312/passkey-practice/backend/internal/usecase/user"
 	handler "github.com/Minto312/passkey-practice/backend/internal/web/handler"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
-	"log/slog"
-	"net/http"
-	"os"
 )
 
 func main() {
@@ -57,10 +60,38 @@ func setupRouter(client *ent.Client) *gin.Engine {
 	userUC := usecase.NewRegisterUserUseCase(userRepo)
 
 	r := gin.Default()
-	r.GET("/api/health", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"status": "ok"})
-	})
 
-	r.POST("/api/signup", handler.RegisterUserHandlerGin(userUC))
+	r.Use(cors.New(cors.Config{
+		AllowOrigins: []string{
+			"http://localhost:3000",
+		},
+		AllowMethods: []string{
+			"POST",
+			"GET",
+			"OPTIONS",
+			"PUT",
+			"DELETE",
+		},
+		AllowHeaders: []string{
+			"Access-Control-Allow-Credentials",
+			"Access-Control-Allow-Headers",
+			"Content-Type",
+			"Content-Length",
+			"Accept-Encoding",
+			"Authorization",
+		},
+		AllowCredentials: true,
+		MaxAge:           24 * time.Hour,
+	}))
+
+	api := r.Group("/api")
+	{
+		api.GET("/health", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{"status": "ok"})
+		})
+
+		api.POST("/signup", handler.RegisterUserHandlerGin(userUC))
+	}
+
 	return r
 }
