@@ -48,6 +48,24 @@ export default function RootLayout({
 						>
 							ログイン
 						</Link>
+						<Link
+							href="/logout"
+							className="relative px-1 py-0.5 text-blue-700 dark:text-blue-300 font-bold transition-colors duration-200 hover:text-blue-900 dark:hover:text-white after:absolute after:left-0 after:-bottom-1 after:w-full after:h-0.5 after:bg-blue-400 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left after:duration-200"
+						>
+							ログアウト
+						</Link>
+						<Link
+							href="/passkeys"
+							className="relative px-1 py-0.5 text-blue-700 dark:text-blue-300 font-bold transition-colors duration-200 hover:text-blue-900 dark:hover:text-white after:absolute after:left-0 after:-bottom-1 after:w-full after:h-0.5 after:bg-blue-400 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left after:duration-200"
+						>
+							パスキー
+						</Link>
+						<Link
+							href="/auth-history"
+							className="relative px-1 py-0.5 text-blue-700 dark:text-blue-300 font-bold transition-colors duration-200 hover:text-blue-900 dark:hover:text-white after:absolute after:left-0 after:-bottom-1 after:w-full after:h-0.5 after:bg-blue-400 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left after:duration-200"
+						>
+							認証履歴
+						</Link>
 					</nav>
 				</header>
 
