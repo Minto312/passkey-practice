@@ -4,8 +4,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"time"
 	"github.com/google/uuid"
+	"time"
 )
 
 type Passkey struct {
@@ -25,6 +25,6 @@ func (Passkey) Fields() []ent.Field {
 
 func (Passkey) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User{}).Ref("passkeys"),
+		edge.From("user", User.Type).Ref("passkeys"),
 	}
 }

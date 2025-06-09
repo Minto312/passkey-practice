@@ -4,8 +4,8 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
-	"time"
 	"github.com/google/uuid"
+	"time"
 )
 
 type Session struct {
@@ -25,6 +25,6 @@ func (Session) Fields() []ent.Field {
 
 func (Session) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User.Type).Ref("sessions"),
+		edge.From("user", User.Type).Ref("sessions").Unique(),
 	}
 }

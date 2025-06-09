@@ -1,6 +1,6 @@
 package repository
 
-import "passkey-practice/backend/internal/domain/user"
+import "github.com/Minto312/passkey-practice/backend/internal/domain/user"
 
 type UserRepository interface {
 	Save(u *user.User) error

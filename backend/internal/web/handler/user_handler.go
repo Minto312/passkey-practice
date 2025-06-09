@@ -2,9 +2,9 @@ package handler
 
 import (
 	"encoding/json"
+	usecase "github.com/Minto312/passkey-practice/backend/internal/usecase/user"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	usecase "passkey-practice/backend/internal/usecase/user"
 )
 
 type RegisterUserRequest struct {
@@ -45,7 +45,9 @@ func RegisterUserHandler(uc *usecase.RegisterUserUseCase) http.HandlerFunc {
 			Email: user.Email.String(),
 		}
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(res)
+		if err := json.NewEncoder(w).Encode(res); err != nil {
+			http.Error(w, "Failed to encode response", http.StatusInternalServerError)
+		}
 	}
 }
 

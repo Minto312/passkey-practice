@@ -1,9 +1,9 @@
 package user
 
 import (
+	domain "github.com/Minto312/passkey-practice/backend/internal/domain/user"
+	"github.com/Minto312/passkey-practice/backend/internal/infra/repository"
 	"github.com/google/uuid"
-	domain "passkey-practice/backend/internal/domain/user"
-	"passkey-practice/backend/internal/infra/repository"
 )
 
 type RegisterUserInput struct {

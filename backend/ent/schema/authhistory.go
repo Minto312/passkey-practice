@@ -23,6 +23,6 @@ func (AuthHistory) Fields() []ent.Field {
 
 func (AuthHistory) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("user", User{}).Ref("auth_histories"),
+		edge.From("user", User.Type).Ref("auth_histories").Unique(),
 	}
 }
