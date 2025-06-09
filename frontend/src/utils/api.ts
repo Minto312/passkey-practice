@@ -13,7 +13,7 @@ function createApiClient(baseURL: string = BASE_URL): AxiosInstance {
 
 	instance.interceptors.request.use((config) => {
 		const token = localStorage.getItem("token") || "";
-		if (token) config.headers["Authorization"] = `Bearer ${token}`;
+		if (token) config.headers.Authorization = `Bearer ${token}`;
 		return config;
 	});
 
@@ -27,12 +27,8 @@ function createApiClient(baseURL: string = BASE_URL): AxiosInstance {
 	return instance;
 }
 
-export async function apiRequest<T = any, D = any>(config: AxiosRequestConfig<D>): Promise<T> {
+export async function apiRequest<T = unknown, D = unknown>(config: AxiosRequestConfig<D>): Promise<T> {
 	const client = createApiClient();
-	try {
-		const response: AxiosResponse<T> = await client.request<T, AxiosResponse<T>, D>(config);
-		return response.data;
-	} catch (error: any) {
-		throw error;
-	}
+	const response: AxiosResponse<T> = await client.request<T, AxiosResponse<T>, D>(config);
+	return response.data;
 }
