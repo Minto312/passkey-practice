@@ -21,12 +21,16 @@ func (r *EntUserRepository) Save(u *domainuser.User) error {
 	ctx := context.Background()
 
 	if u.ID == uuid.Nil { // 新規作成
-		_, err := r.client.User.Create().
+		createdUser, err := r.client.User.Create().
 			SetName(u.Name).
 			SetEmail(u.Email.String()).
 			SetPasswordHash(u.Password.Hash()).
 			Save(ctx)
-		return err
+		if err != nil {
+			return err
+		}
+		u.ID = createdUser.ID
+		return nil
 	} else { // 更新
 		_, err := r.client.User.UpdateOneID(u.ID).
 			SetName(u.Name).
@@ -61,5 +65,7 @@ func entToDomainUser(entUser *entpkg.User) (*domainuser.User, error) {
 		return nil, err
 	}
 	password := domainuser.NewPasswordFromHash(entUser.PasswordHash)
-	return domainuser.NewUser(entUser.ID, entUser.Name, email, password), nil
+	user := domainuser.NewUser(entUser.Name, email, password)
+	user.ID = entUser.ID
+	return user, nil
 }

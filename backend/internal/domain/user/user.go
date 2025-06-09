@@ -14,9 +14,8 @@ type User struct {
 }
 
 // Userのコンストラクタ
-func NewUser(id ID, name string, email Email, password Password) *User {
+func NewUser(name string, email Email, password Password) *User {
 	return &User{
-		ID:       id,
 		Name:     name,
 		Email:    email,
 		Password: password,

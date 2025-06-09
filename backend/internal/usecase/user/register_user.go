@@ -3,7 +3,6 @@ package user
 import (
 	domain "github.com/Minto312/passkey-practice/backend/internal/domain/user"
 	"github.com/Minto312/passkey-practice/backend/internal/infra/repository"
-	"github.com/google/uuid"
 )
 
 type RegisterUserInput struct {
@@ -29,7 +28,7 @@ func (uc *RegisterUserUseCase) Register(input RegisterUserInput) (*domain.User, 
 	if err != nil {
 		return nil, err
 	}
-	user := domain.NewUser(uuid.New(), input.Name, email, password)
+	user := domain.NewUser(input.Name, email, password)
 	if err := uc.repo.Save(user); err != nil {
 		return nil, err
 	}

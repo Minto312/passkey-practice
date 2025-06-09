@@ -63,7 +63,7 @@ func setupRouter(client *ent.Client) *gin.Engine {
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins: []string{
-			"http://localhost:3000",
+			"http://localhost:3001",
 		},
 		AllowMethods: []string{
 			"POST",
