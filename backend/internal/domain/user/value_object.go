@@ -27,6 +27,13 @@ func NewEmail(email string) (Email, error) {
 // PasswordHash はパスワードハッシュを表す値オブジェクトです。
 type PasswordHash string
 
+func NewPasswordHash(hash string) (PasswordHash, error) {
+	if hash == "" {
+		return "", errors.New("password hash is empty")
+	}
+	return PasswordHash(hash), nil
+}
+
 // DisplayName は表示名を表す値オブジェクトです。
 type DisplayName string
 
