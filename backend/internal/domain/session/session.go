@@ -6,89 +6,81 @@ import (
 	"github.com/Minto312/passkey-practice/backend/internal/domain/user"
 )
 
-// Session はセッションを表すエンティティです。
+// Session はセッションを表すエンティティだよ。
 type Session struct {
 	id           SessionID
 	userID       user.UserID
-	createdAt    time.Time
-	expiresAt    time.Time
 	refreshToken RefreshToken
 	ipAddress    IPAddress
 	userAgent    UserAgent
+	expiresAt    time.Time
+	createdAt    time.Time
 }
 
-// NewSession は新しいセッションを作成します。
+// NewSession は新しいセッションエンティティを生成するよ。
 func NewSession(
-	id SessionID,
 	userID user.UserID,
-	expiresAt time.Time,
 	refreshToken RefreshToken,
 	ipAddress IPAddress,
 	userAgent UserAgent,
+	expiresAt time.Time,
 ) *Session {
 	return &Session{
-		id:           id,
+		id:           NewSessionID(),
 		userID:       userID,
+		refreshToken: refreshToken,
+		ipAddress:    ipAddress,
+		userAgent:    userAgent,
+		expiresAt:    expiresAt,
 		createdAt:    time.Now(),
-		expiresAt:    expiresAt,
-		refreshToken: refreshToken,
-		ipAddress:    ipAddress,
-		userAgent:    userAgent,
 	}
 }
 
-// Reconstruct は永続化層からセッションを再構築します。
-func Reconstruct(
+// FromRepository はリポジトリから取得した情報をもとにセッションエンティティを再構築するよ。
+func FromRepository(
 	id SessionID,
 	userID user.UserID,
-	createdAt time.Time,
-	expiresAt time.Time,
 	refreshToken RefreshToken,
 	ipAddress IPAddress,
 	userAgent UserAgent,
+	expiresAt time.Time,
+	createdAt time.Time,
 ) *Session {
 	return &Session{
 		id:           id,
 		userID:       userID,
-		createdAt:    createdAt,
-		expiresAt:    expiresAt,
 		refreshToken: refreshToken,
 		ipAddress:    ipAddress,
 		userAgent:    userAgent,
+		expiresAt:    expiresAt,
+		createdAt:    createdAt,
 	}
 }
 
-// ID はセッションIDを返します。
 func (s *Session) ID() SessionID {
 	return s.id
 }
 
-// UserID はユーザーIDを返します。
 func (s *Session) UserID() user.UserID {
 	return s.userID
 }
 
-// CreatedAt は作成日時を返します。
-func (s *Session) CreatedAt() time.Time {
-	return s.createdAt
-}
-
-// ExpiresAt は有効期限を返します。
-func (s *Session) ExpiresAt() time.Time {
-	return s.expiresAt
-}
-
-// RefreshToken はリフレッシュトークンを返します。
 func (s *Session) RefreshToken() RefreshToken {
 	return s.refreshToken
 }
 
-// IPAddress はIPアドレスを返します。
 func (s *Session) IPAddress() IPAddress {
 	return s.ipAddress
 }
 
-// UserAgent はユーザーエージェントを返します。
 func (s *Session) UserAgent() UserAgent {
 	return s.userAgent
+}
+
+func (s *Session) ExpiresAt() time.Time {
+	return s.expiresAt
+}
+
+func (s *Session) CreatedAt() time.Time {
+	return s.createdAt
 }

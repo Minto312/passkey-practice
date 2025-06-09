@@ -36,8 +36,13 @@ func main() {
 
 	// DI
 	userRepo := repository.NewUserRepository(client)
+	sessionRepo := repository.NewSessionRepository(client)
+
 	registerUserUseCase := user_usecase.NewRegisterUserInteractor(userRepo)
-	userController := user.NewRegisterUserController(registerUserUseCase)
+	registerUserController := user.NewRegisterUserController(registerUserUseCase)
+
+	loginUserUseCase := user_usecase.NewLoginUserInteractor(userRepo, sessionRepo)
+	loginUserController := user.NewLoginUserController(loginUserUseCase)
 
 	// Setup router
 	router := gin.Default()
@@ -50,7 +55,8 @@ func main() {
 	config.AllowCredentials = true
 	router.Use(cors.New(config))
 
-	router.POST("/signup", userController.RegisterUser)
+	router.POST("/signup", registerUserController.RegisterUser)
+	router.POST("/login", loginUserController.LoginUser)
 
 	// Start server
 	if err := router.Run(":8080"); err != nil {
