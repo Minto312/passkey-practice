@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Minto312/passkey-practice/backend/internal/domain/user"
@@ -37,4 +38,28 @@ func GenerateTokens(u *user.User) (*Tokens, error) {
 		AccessToken:  accessTokenString,
 		RefreshToken: refreshTokenString,
 	}, nil
+}
+
+// VerifyToken はアクセストークンを検証し、ユーザーIDを返す
+func VerifyToken(tokenString string) (string, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return jwtSecret, nil
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		sub, err := claims.GetSubject()
+		if err != nil {
+			return "", fmt.Errorf("invalid subject in token")
+		}
+		return sub, nil
+	}
+
+	return "", fmt.Errorf("invalid token")
 }

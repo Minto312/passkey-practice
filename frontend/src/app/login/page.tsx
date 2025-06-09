@@ -29,7 +29,7 @@ export default function Login() {
 			setSuccess("ログインに成功しました！");
 			// 2秒後にマイページにリダイレクト
 			setTimeout(() => {
-				router.push("/mypage");
+				router.push("/auth-history");
 			}, 2000);
 		} catch (err) {
 			if (isAxiosError(err) && err.response) {
