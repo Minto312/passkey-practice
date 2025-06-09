@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"log"
 
+	"github.com/Minto312/passkey-practice/backend/ent/migrate"
 	"github.com/Minto312/passkey-practice/backend/internal/controller/user"
 	"github.com/Minto312/passkey-practice/backend/internal/infra/repository"
 	user_usecase "github.com/Minto312/passkey-practice/backend/internal/usecase/user"
@@ -14,7 +16,7 @@ import (
 )
 
 func main() {
-	dsn := "host=db port=5432 user=postgres password=postgres dbname=passkey sslmode=disable"
+	dsn := "host=devcontainer-db-1 port=5432 user=postgres password=postgres dbname=passkey sslmode=disable"
 	client, err := ent.Open("postgres", dsn)
 	if err != nil {
 		log.Fatalf("failed opening connection to postgres: %v", err)
@@ -22,15 +24,15 @@ func main() {
 	defer client.Close()
 
 	// Run the auto migration tool.
-	// if err := client.Schema.Create(
-	// 	context.Background(),
-	// 	migrate.WithDropIndex(true),
-	// 	migrate.WithDropColumn(true),
-	// ); err != nil {
-	// 	log.Fatalf("failed creating schema resources: %v", err)
-	// }
+	if err := client.Schema.Create(
+		context.Background(),
+		migrate.WithDropIndex(true),
+		migrate.WithDropColumn(true),
+	); err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
+	}
 
-	// log.Println("ent: migration completed")
+	log.Println("ent: migration completed")
 
 	// DI
 	userRepo := repository.NewUserRepository(client)

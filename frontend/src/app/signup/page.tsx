@@ -30,7 +30,7 @@ export default function Signup() {
 			await apiRequest({
 				method: "POST",
 				url: "/signup",
-				data: { name, email, password },
+				data: { display_name: name, email, password },
 			});
 			setSuccess("登録が完了しました。ログインページに移動します。");
 			setTimeout(() => {
