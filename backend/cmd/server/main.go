@@ -8,7 +8,7 @@ import (
 	usecase "github.com/Minto312/passkey-practice/backend/internal/usecase/user"
 	handler "github.com/Minto312/passkey-practice/backend/internal/web/handler"
 	"github.com/gin-gonic/gin"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 	"log/slog"
 	"net/http"
 	"os"
@@ -41,9 +41,9 @@ func run() error {
 }
 
 func setupDB(ctx context.Context) (*ent.Client, error) {
-	client, err := ent.Open("sqlite3", "file:passkey.db?cache=shared&_fk=1")
+	client, err := ent.Open("postgres", "host=db port=5432 user=postgres dbname=passkey password=postgres sslmode=disable")
 	if err != nil {
-		return nil, fmt.Errorf("failed opening connection to sqlite: %w", err)
+		return nil, fmt.Errorf("failed opening connection to postgres: %w", err)
 	}
 
 	if err := client.Schema.Create(ctx); err != nil {
