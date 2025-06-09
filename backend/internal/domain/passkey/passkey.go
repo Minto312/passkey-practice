@@ -1,9 +1,12 @@
 package passkey
 
 import (
+	"context"
+	"log"
 	"time"
 
 	"github.com/Minto312/passkey-practice/backend/internal/domain/user"
+	"github.com/go-webauthn/webauthn/webauthn"
 )
 
 // Passkey はパスキーを表すエンティティです。
@@ -54,6 +57,23 @@ func Reconstruct(
 		createdAt:    createdAt,
 		lastUsedAt:   lastUsedAt,
 	}
+}
+
+func BeginAssertion(ctx context.Context) (*webauthn.WebAuthn, error) {
+	
+wconfig := &webauthn.Config{
+	RPDisplayName: "Passkey Practice", // Display Name for your site
+	RPID: "passkey-practice.local", // Generally the FQDN for your site
+	RPOrigins: []string{"http://localhost:8080"}, // The origin URLs allowed for WebAuthn requests
+}
+
+webAuthn, err := webauthn.New(wconfig)
+if err != nil {
+	log.Fatalf("failed to initialize webauthn: %v", err)
+	return nil, err
+}
+
+return webAuthn, nil
 }
 
 // ID はパスキーIDを返します。
