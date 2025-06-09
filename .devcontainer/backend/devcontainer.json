@@ -32,7 +32,9 @@
                 "mhutchie.git-graph",
                 "github.vscode-pull-request-github",
                 "streetsidesoftware.code-spell-checker",
-                "saoudrizwan.claude-dev"
+                "saoudrizwan.claude-dev",
+
+                "golang.go"
             ]
         }
     },

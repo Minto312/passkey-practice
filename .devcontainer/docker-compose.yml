@@ -12,19 +12,6 @@ services:
       - USER_GID=${USER_GID:-1000}
     tty: true
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    volumes:
-      - ..:/workspace:cached
-    working_dir: /workspace
-    user: "${USER_UID:-1000}:${USER_GID:-1000}"
-    environment:
-      - USER_UID=${USER_UID:-1000}
-      - USER_GID=${USER_GID:-1000}
-    tty: true
-
   db:
     image: postgres:latest
     restart: unless-stopped
@@ -32,8 +19,6 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=passkey
-    ports:
-      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
 
