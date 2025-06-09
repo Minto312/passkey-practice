@@ -29,7 +29,7 @@ export default function Signup() {
 		try {
 			await apiRequest({
 				method: "POST",
-				url: "/api/signup",
+				url: "/signup",
 				data: { name, email, password },
 			});
 			setSuccess("登録が完了しました。ログインページに移動します。");

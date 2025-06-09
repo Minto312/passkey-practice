@@ -3,6 +3,8 @@ package user
 import (
 	"errors"
 	"regexp"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -11,7 +13,23 @@ var (
 )
 
 // UserID はユーザーIDを表す値オブジェクトです。
-type UserID int
+type UserID struct {
+	uuid.UUID
+}
+
+// NewUserID は新しいユーザーIDを生成します。
+func NewUserID() UserID {
+	return UserID{uuid.New()}
+}
+
+// ParseUserID は文字列からユーザーIDをパースします。
+func ParseUserID(s string) (UserID, error) {
+	id, err := uuid.Parse(s)
+	if err != nil {
+		return UserID{}, err
+	}
+	return UserID{id}, nil
+}
 
 // Email はメールアドレスを表す値オブジェクトです。
 type Email string

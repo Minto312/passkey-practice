@@ -2,7 +2,6 @@ package user
 
 import "time"
 
-// User はユーザーを表すエンティティです。
 type User struct {
 	id          UserID
 	email       Email
@@ -12,7 +11,6 @@ type User struct {
 	updatedAt   time.Time
 }
 
-// NewUser は新しいユーザーを作成します。
 func NewUser(
 	email Email,
 	password PasswordHash,
@@ -20,6 +18,7 @@ func NewUser(
 ) *User {
 	now := time.Now()
 	return &User{
+		id:          NewUserID(),
 		email:       email,
 		password:    password,
 		displayName: displayName,
