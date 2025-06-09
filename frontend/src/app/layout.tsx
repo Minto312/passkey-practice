@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +24,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ja">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-white to-blue-50 dark:from-gray-300 dark:to-blue-450 min-h-screen flex flex-col`}
       >
-        {children}
+        <header className="w-full p-4 shadow-md bg-white/80 dark:bg-gray-900/80 backdrop-blue">
+            <nav className="flex justify-end gap-8 mb-2">
+              <Link href="/" className="relative px-1 py-0.5 text-blue-700 dark:text-blue-300 font-bold transition-colors duration-200 hover:text-blue-900 dark:hover:text-white after:absolute after:left-0 after:-bottom-1 after:w-full after:h-0.5 after:bg-blue-400 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left after:duration-200">Home</Link>
+              <Link href="/signup" className="relative px-1 py-0.5 text-blue-700 dark:text-blue-300 font-bold transition-colors duration-200 hover:text-blue-900 dark:hover:text-white after:absolute after:left-0 after:-bottom-1 after:w-full after:h-0.5 after:bg-blue-400 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left after:duration-200">新規登録</Link>
+              <Link href="/login" className="relative px-1 py-0.5 text-blue-700 dark:text-blue-300 font-bold transition-colors duration-200 hover:text-blue-900 dark:hover:text-white after:absolute after:left-0 after:-bottom-1 after:w-full after:h-0.5 after:bg-blue-400 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:origin-left after:duration-200">ログイン</Link>
+            </nav>
+        </header>
+
+        <main className="flex-1 flex flex-col items-center justify-center w-full h-full">
+          {children}
+        </main>
+
+        <footer className="w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur text-center py-4 text-xs text-gray-400 dark:text-gray-500 shadow-inner">
+          &copy; {new Date().getFullYear()} Passkey Practice
+        </footer>
       </body>
     </html>
   );
