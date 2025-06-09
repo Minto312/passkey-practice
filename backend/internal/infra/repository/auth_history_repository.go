@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/Minto312/passkey-practice/backend/ent"
-	ent_auth_history "github.com/Minto312/passkey-practice/backend/ent/authhistory"
 	"github.com/Minto312/passkey-practice/backend/internal/domain/auth_history"
 	"github.com/Minto312/passkey-practice/backend/internal/domain/user"
 )
@@ -21,25 +20,38 @@ func NewAuthHistoryRepository(client *ent.Client) auth_history.AuthHistoryReposi
 	}
 }
 
-func (r *authHistoryRepository) Create(ctx context.Context, h *auth_history.AuthHistory) (*auth_history.AuthHistory, error) {
-	created, err := r.client.AuthHistory.
+func (r *authHistoryRepository) Save(ctx context.Context, authHistory *auth_history.AuthHistory) error {
+	_, err := r.client.AuthHistory.
 		Create().
-		SetID(h.ID().UUID).
-		SetUserID(h.UserID().UUID).
-		SetMethod(string(h.Method())).
-		SetIPAddress(string(h.IPAddress())).
-		SetUserAgent(string(h.UserAgent())).
+		SetID(authHistory.ID().UUID).
+		SetUserID(authHistory.UserID().UUID).
+		SetMethod(string(authHistory.Method())).
+		SetIPAddress(string(authHistory.IPAddress())).
+		SetUserAgent(string(authHistory.UserAgent())).
+		SetAuthenticatedAt(authHistory.AuthenticatedAt()).
 		Save(ctx)
 	if err != nil {
-		return nil, err
+		return fmt.Errorf("failed creating auth history: %w", err)
 	}
+	return nil
+}
 
-	saved, err := r.client.AuthHistory.Query().Where(ent_auth_history.IDEQ(created.ID)).WithUser().Only(ctx)
+func (r *authHistoryRepository) FindAll(ctx context.Context) ([]*auth_history.AuthHistory, error) {
+	histories, err := r.client.AuthHistory.Query().WithUser().All(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get auth histories: %w", err)
 	}
 
-	return toDomainAuthHistory(saved)
+	domainHistories := make([]*auth_history.AuthHistory, len(histories))
+	for i, h := range histories {
+		domainHistory, err := toDomainAuthHistory(h)
+		if err != nil {
+			return nil, fmt.Errorf("failed to convert auth history: %w", err)
+		}
+		domainHistories[i] = domainHistory
+	}
+
+	return domainHistories, nil
 }
 
 func toDomainAuthHistory(e *ent.AuthHistory) (*auth_history.AuthHistory, error) {

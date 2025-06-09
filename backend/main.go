@@ -5,8 +5,10 @@ import (
 	"log"
 
 	"github.com/Minto312/passkey-practice/backend/ent/migrate"
+	auth_history_controller "github.com/Minto312/passkey-practice/backend/internal/controller/auth_history"
 	"github.com/Minto312/passkey-practice/backend/internal/controller/user"
 	"github.com/Minto312/passkey-practice/backend/internal/infra/repository"
+	auth_history_usecase "github.com/Minto312/passkey-practice/backend/internal/usecase/auth_history"
 	user_usecase "github.com/Minto312/passkey-practice/backend/internal/usecase/user"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -45,6 +47,9 @@ func main() {
 	loginUserUseCase := user_usecase.NewLoginUserInteractor(userRepo, sessionRepo, authHistoryRepo)
 	loginUserController := user.NewLoginUserController(loginUserUseCase)
 
+	getAuthHistoriesUseCase := auth_history_usecase.NewGetAuthHistoriesInteractor(authHistoryRepo)
+	getAuthHistoriesController := auth_history_controller.NewGetAuthHistoriesController(getAuthHistoriesUseCase)
+
 	// Setup router
 	router := gin.Default()
 
@@ -58,6 +63,7 @@ func main() {
 
 	router.POST("/signup", registerUserController.RegisterUser)
 	router.POST("/login", loginUserController.LoginUser)
+	router.GET("/auth/history", getAuthHistoriesController.GetAuthHistories)
 
 	// Start server
 	if err := router.Run(":8080"); err != nil {

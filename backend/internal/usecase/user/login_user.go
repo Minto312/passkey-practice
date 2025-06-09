@@ -109,7 +109,7 @@ func (i *loginUserInteractor) Execute(ctx context.Context, input LoginUserInput)
 		auth_history.IPAddress(ipAddress),
 		auth_history.UserAgent(userAgent),
 	)
-	_, err = i.authHistoryRepo.Create(ctx, newAuthHistory)
+	err = i.authHistoryRepo.Save(ctx, newAuthHistory)
 	if err != nil {
 		// 認証履歴の記録失敗はログイン自体を失敗させない（ロギング推奨）
 		// return nil, err
