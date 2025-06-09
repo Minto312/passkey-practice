@@ -6,6 +6,7 @@ import (
 	"github.com/Minto312/passkey-practice/backend/internal/controller/user"
 	"github.com/Minto312/passkey-practice/backend/internal/infra/repository"
 	user_usecase "github.com/Minto312/passkey-practice/backend/internal/usecase/user"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	"github.com/Minto312/passkey-practice/backend/ent"
@@ -38,6 +39,15 @@ func main() {
 
 	// Setup router
 	router := gin.Default()
+
+	// CORSミドルウェアの設定
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3001"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Accept", "Authorization"}
+	config.AllowCredentials = true
+	router.Use(cors.New(config))
+
 	router.POST("/signup", userController.RegisterUser)
 
 	// Start server
